@@ -1,0 +1,19 @@
+pipeline {
+agent any
+ parameters {
+  string(name: 'param1', defaultValue: 'example-value', description: 'Parameter 1')
+ }
+stages {
+  stage('HTTP Request') {
+   steps {
+    script {
+     def response = httpRequest "http://httpbin.org/response-headers?param1=${param1}"
+     writeFile file: 'response.txt', text: response.content
+     println("Status: ${response.status}")
+     println("Response: ${response.content}")
+     println("Headers: ${response.headers}")
+  }
+ }
+}
+}
+}
